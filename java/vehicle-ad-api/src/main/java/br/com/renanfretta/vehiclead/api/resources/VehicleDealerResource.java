@@ -56,9 +56,25 @@ public class VehicleDealerResource {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<VehicleDealerOutputDTO> updateAll(@PathVariable Long id, @Valid @RequestBody VehicleDealerInputDTO inputDTO) throws ResourceNotFoundException {
-        VehicleDealerOutputDTO outputDTO = service.updateAll(id, inputDTO);
-        return ResponseEntity.status(HttpStatus.OK).body(outputDTO);
+    public ResponseEntity<VehicleDealerOutputDTO> updateAll(@PathVariable Long id, @Valid @RequestBody VehicleDealerInputDTO inputDTO) {
+        try {
+            VehicleDealerOutputDTO outputDTO = service.updateAll(id, inputDTO);
+            return ResponseEntity.ok(outputDTO);
+        } catch (ResourceNotFoundException e) {
+            log.info("VehicleDealerResource/updateAll id: " + id + " notFound");
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PatchMapping(value = "/{id}")
+    public ResponseEntity<VehicleDealerOutputDTO> partialUpdate(@PathVariable Long id, @Valid @RequestBody VehicleDealerInputDTO inputDTO) {
+        try {
+            VehicleDealerOutputDTO outputDTO = service.partialUpdate(id, inputDTO);
+            return ResponseEntity.ok(outputDTO);
+        } catch (ResourceNotFoundException e) {
+            log.info("VehicleDealerResource/partialUpdate id: " + id + " notFound");
+            return ResponseEntity.notFound().build();
+        }
     }
 
 }

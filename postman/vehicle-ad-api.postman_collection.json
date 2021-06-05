@@ -99,6 +99,34 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "PartialUpdate",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Prime Car Dealer\",\r\n    \"email\": \"contact@primecar.com\",\r\n    \"tierLimit\": 3\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/vehicle-dealer/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"vehicle-dealer",
+								"1"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}

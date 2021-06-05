@@ -15,6 +15,8 @@ import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 
+import static java.util.Objects.nonNull;
+
 @Slf4j
 @RequiredArgsConstructor
 @Service
@@ -61,6 +63,29 @@ public class VehicleDealerService {
         entity.setId(id);
         entity = repository.save(entity);
         log.info("VehicleDealerRepository/updateAll(" + objectMapper.writeValueAsStringNoException(entity) + ") was successful");
+        return orikaMapper.map(entity, VehicleDealerOutputDTO.class);
+    }
+
+    public VehicleDealerOutputDTO partialUpdate(Long id, VehicleDealerInputDTO inputDTO) throws ResourceNotFoundException {
+        VehicleDealer entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(messagesProperty.getErrorMessageResourceNotFoundFindById(VehicleDealer.class, id)));
+
+        if (nonNull(inputDTO.getName()))
+            entity.setName(inputDTO.getName());
+
+        if (nonNull(inputDTO.getPhone()))
+            entity.setPhone(inputDTO.getPhone());
+
+        if (nonNull(inputDTO.getEmail()))
+            entity.setEmail(inputDTO.getEmail());
+
+        if (nonNull(inputDTO.getAddress()))
+            entity.setAddress(inputDTO.getAddress());
+
+        if (nonNull(inputDTO.getTierLimit()))
+            entity.setTierLimit(inputDTO.getTierLimit());
+
+        entity = repository.save(entity);
+        log.info("VehicleDealerRepository/partialUpdate(" + objectMapper.writeValueAsStringNoException(entity) + ") was successful");
         return orikaMapper.map(entity, VehicleDealerOutputDTO.class);
     }
 
