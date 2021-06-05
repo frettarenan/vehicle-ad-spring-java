@@ -1,0 +1,32 @@
+{
+	"info": {
+		"_postman_id": "bcb0a090-6dda-44ef-8e59-1b12e6fd6211",
+		"name": "vehicle-ad-api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Vehicle Dealer",
+			"item": [
+				{
+					"name": "Find All",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/vehicle-dealer",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"vehicle-dealer"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
