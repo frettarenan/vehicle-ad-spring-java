@@ -55,4 +55,10 @@ public class VehicleDealerResource {
         return ResponseEntity.status(HttpStatus.CREATED).body(outputDTO);
     }
 
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<VehicleDealerOutputDTO> updateAll(@PathVariable Long id, @Valid @RequestBody VehicleDealerInputDTO inputDTO) throws ResourceNotFoundException {
+        VehicleDealerOutputDTO outputDTO = service.updateAll(id, inputDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(outputDTO);
+    }
+
 }

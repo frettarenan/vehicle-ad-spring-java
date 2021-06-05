@@ -50,4 +50,18 @@ public class VehicleDealerService {
         return orikaMapper.map(entity, VehicleDealerOutputDTO.class);
     }
 
+    private void validateVehicleDealerExists(Long id) throws ResourceNotFoundException {
+        repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(messagesProperty.getErrorMessageResourceNotFoundFindById(VehicleDealer.class, id)));
+    }
+
+    public VehicleDealerOutputDTO updateAll(Long id, VehicleDealerInputDTO inputDTO) throws ResourceNotFoundException {
+        validateVehicleDealerExists(id);
+
+        VehicleDealer entity = orikaMapper.map(inputDTO, VehicleDealer.class);
+        entity.setId(id);
+        entity = repository.save(entity);
+        log.info("VehicleDealerRepository/updateAll(" + objectMapper.writeValueAsStringNoException(entity) + ") was successful");
+        return orikaMapper.map(entity, VehicleDealerOutputDTO.class);
+    }
+
 }

@@ -44,6 +44,61 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Save",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Prime Car Dealer\",\r\n    \"phone\": \"+14186232400\",\r\n    \"email\": \"contact@primecar.com\",\r\n    \"address\": \"RPJ2+F9 Quebec, Canada\",\r\n    \"tierLimit\": 3\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/vehicle-dealer",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"vehicle-dealer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateAll",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Super Prime Car Dealer\",\r\n    \"phone\": \"+14186232499\",\r\n    \"email\": \"contact@superprimecar.com\",\r\n    \"address\": \"RPJ2+F10 Quebec, Canada\",\r\n    \"tierLimit\": 5\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/vehicle-dealer/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"vehicle-dealer",
+								"1"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}
