@@ -39,11 +39,11 @@ public class VehicleAd implements Serializable {
 
     private Boolean used;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_vehicle_dealer")
     private VehicleDealer vehicleDealer;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_vehicle_ad_state")
     private VehicleAdState state;
 

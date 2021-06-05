@@ -7,7 +7,7 @@ import br.com.renanfretta.vehiclead.api.dtos.vehicledealer.input.VehicleDealerIn
 import br.com.renanfretta.vehiclead.api.dtos.vehicledealer.output.VehicleDealerOutputDTO;
 import br.com.renanfretta.vehiclead.api.entities.VehicleDealer;
 import br.com.renanfretta.vehiclead.api.exceptions.ResourceNotFoundException;
-import br.com.renanfretta.vehiclead.api.repositories.VehicleDealerRepository;
+import br.com.renanfretta.vehiclead.api.repositories.vehicledealer.VehicleDealerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
