@@ -127,6 +127,25 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "DeleteById",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/vehicle-dealer/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"vehicle-dealer",
+								"1"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}

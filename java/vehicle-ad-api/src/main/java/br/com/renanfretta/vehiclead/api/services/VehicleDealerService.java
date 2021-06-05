@@ -89,4 +89,10 @@ public class VehicleDealerService {
         return orikaMapper.map(entity, VehicleDealerOutputDTO.class);
     }
 
+    public VehicleDealerOutputDTO deleteById(Long id) throws ResourceNotFoundException {
+        VehicleDealer entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(messagesProperty.getErrorMessageResourceNotFoundFindById(VehicleDealer.class, id)));
+        repository.delete(entity);
+        return orikaMapper.map(entity, VehicleDealerOutputDTO.class);
+    }
+
 }
