@@ -1,11 +1,10 @@
 package br.com.renanfretta.vehiclead.api.resources;
 
+import br.com.renanfretta.vehiclead.api.commons.ObjectMapperSpecialized;
 import br.com.renanfretta.vehiclead.api.dtos.vehicledealer.input.VehicleDealerInputDTO;
 import br.com.renanfretta.vehiclead.api.dtos.vehicledealer.output.VehicleDealerOutputDTO;
 import br.com.renanfretta.vehiclead.api.exceptions.ResourceNotFoundException;
 import br.com.renanfretta.vehiclead.api.services.VehicleDealerService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -22,7 +21,7 @@ import java.util.List;
 public class VehicleDealerResource {
 
     private final VehicleDealerService service;
-    private final ObjectMapper objectMapper;
+    private final ObjectMapperSpecialized objectMapper;
 
     @GetMapping
     public ResponseEntity<List<VehicleDealerOutputDTO>> findAll() {
@@ -51,17 +50,9 @@ public class VehicleDealerResource {
 
     @PostMapping
     public ResponseEntity<VehicleDealerOutputDTO> save(@Valid @RequestBody VehicleDealerInputDTO inputDTO) {
-        saveWasCalledLog(inputDTO);
+        log.info("VehicleDealerResource/save( " + objectMapper.writeValueAsStringNoException(inputDTO) + ") was called");
         VehicleDealerOutputDTO outputDTO = service.save(inputDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(outputDTO);
-    }
-
-    private void saveWasCalledLog(VehicleDealerInputDTO inputDTO) {
-        try {
-            log.info("VehicleDealerResource/save( " + objectMapper.writeValueAsString(inputDTO) + ") was called");
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
     }
 
 }
