@@ -148,6 +148,40 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Vehicle Ad",
+			"item": [
+				{
+					"name": "findByVehicleDealerAndState",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/vehicle-ad?vehicleDealerId=1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"vehicle-ad"
+							],
+							"query": [
+								{
+									"key": "vehicleDealerId",
+									"value": "1"
+								},
+								{
+									"key": "vehicleAdStateId",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }
