@@ -52,40 +52,25 @@ public class VehicleAdResource {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<VehicleAdOutputDTO> updateAll(@PathVariable Long id, @Valid @RequestBody VehicleAdUpdateInputDTO inputDTO) {
+    public ResponseEntity<VehicleAdOutputDTO> updateAll(@PathVariable Long id, @Valid @RequestBody VehicleAdUpdateInputDTO inputDTO) throws ResourceNotFoundException {
         log.info("VehicleAdResource/updateAll(id: " + id + " obj: " + objectMapper.writeValueAsStringNoException(inputDTO) + ") was called");
-        try {
-            VehicleAdOutputDTO outputDTO = service.updateAll(id, inputDTO);
-            return ResponseEntity.ok(outputDTO);
-        } catch (ResourceNotFoundException e) {
-            log.info("VehicleAdResource/updateAll id: " + id + " notFound");
-            return ResponseEntity.notFound().build();
-        }
+        VehicleAdOutputDTO outputDTO = service.updateAll(id, inputDTO);
+        return ResponseEntity.ok(outputDTO);
     }
 
     @PatchMapping(value = "/{id}/publish")
-    public ResponseEntity<VehicleAdOutputDTO> publish(@PathVariable Long id, @RequestParam(name = "respectLimit", required = false) String respectLimitStr) throws VehicleAdAlreadyPublishedException {
+    public ResponseEntity<VehicleAdOutputDTO> publish(@PathVariable Long id, @RequestParam(name = "respectLimit", required = false) String respectLimitStr) throws ResourceNotFoundException, VehicleAdAlreadyPublishedException {
         boolean respectLimit = isNull(respectLimitStr) || !respectLimitStr.equalsIgnoreCase("false");
         log.info("VehicleAdResource/publish(id: " + id + " respectLimit: " + respectLimit + ") was called");
-        try {
-            VehicleAdOutputDTO outputDTO = service.publish(id, respectLimit);
-            return ResponseEntity.ok(outputDTO);
-        } catch (ResourceNotFoundException e) {
-            log.info("VehicleAdResource/publish id: " + id + " notFound");
-            return ResponseEntity.notFound().build();
-        }
+        VehicleAdOutputDTO outputDTO = service.publish(id, respectLimit);
+        return ResponseEntity.ok(outputDTO);
     }
 
     @PatchMapping(value = "/{id}/unpublish")
-    public ResponseEntity<VehicleAdOutputDTO> unpublish(@PathVariable Long id) {
+    public ResponseEntity<VehicleAdOutputDTO> unpublish(@PathVariable Long id) throws ResourceNotFoundException {
         log.info("VehicleAdResource/unpublish(" + id + ") was called");
-        try {
-            VehicleAdOutputDTO outputDTO = service.unpublish(id);
-            return ResponseEntity.ok(outputDTO);
-        } catch (ResourceNotFoundException e) {
-            log.info("VehicleAdResource/unpublish id: " + id + " notFound");
-            return ResponseEntity.notFound().build();
-        }
+        VehicleAdOutputDTO outputDTO = service.unpublish(id);
+        return ResponseEntity.ok(outputDTO);
     }
 
 }

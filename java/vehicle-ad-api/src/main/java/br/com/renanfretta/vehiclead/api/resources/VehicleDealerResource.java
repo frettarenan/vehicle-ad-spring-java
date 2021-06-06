@@ -38,16 +38,11 @@ public class VehicleDealerResource {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<VehicleDealerOutputDTO> findById(@PathVariable Long id) {
+    public ResponseEntity<VehicleDealerOutputDTO> findById(@PathVariable Long id) throws ResourceNotFoundException {
         log.info("VehicleDealerResource/findById(" + id + ") was called");
-        try {
-            VehicleDealerOutputDTO dto = service.findById(id);
-            log.info("VehicleDealerResource/findById(" + id + ") ok");
-            return ResponseEntity.ok(dto);
-        } catch (ResourceNotFoundException e) {
-            log.info("VehicleDealerResource/findAll notFound");
-            return ResponseEntity.notFound().build();
-        }
+        VehicleDealerOutputDTO dto = service.findById(id);
+        log.info("VehicleDealerResource/findById(" + id + ") ok");
+        return ResponseEntity.ok(dto);
     }
 
     @PostMapping
@@ -58,39 +53,24 @@ public class VehicleDealerResource {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<VehicleDealerOutputDTO> updateAll(@PathVariable Long id, @Valid @RequestBody VehicleDealerInputDTO inputDTO) {
+    public ResponseEntity<VehicleDealerOutputDTO> updateAll(@PathVariable Long id, @Valid @RequestBody VehicleDealerInputDTO inputDTO) throws ResourceNotFoundException {
         log.info("VehicleDealerResource/updateAll(id: " + id + " obj: " + objectMapper.writeValueAsStringNoException(inputDTO) + ") was called");
-        try {
-            VehicleDealerOutputDTO outputDTO = service.updateAll(id, inputDTO);
-            return ResponseEntity.ok(outputDTO);
-        } catch (ResourceNotFoundException e) {
-            log.info("VehicleDealerResource/updateAll id: " + id + " notFound");
-            return ResponseEntity.notFound().build();
-        }
+        VehicleDealerOutputDTO outputDTO = service.updateAll(id, inputDTO);
+        return ResponseEntity.ok(outputDTO);
     }
 
     @PatchMapping(value = "/{id}")
-    public ResponseEntity<VehicleDealerOutputDTO> partialUpdate(@PathVariable Long id, @Valid @RequestBody VehicleDealerInputDTO inputDTO) {
+    public ResponseEntity<VehicleDealerOutputDTO> partialUpdate(@PathVariable Long id, @Valid @RequestBody VehicleDealerInputDTO inputDTO) throws ResourceNotFoundException {
         log.info("VehicleDealerResource/partialUpdate(id: " + id + " obj: " + objectMapper.writeValueAsStringNoException(inputDTO) + ") was called");
-        try {
-            VehicleDealerOutputDTO outputDTO = service.partialUpdate(id, inputDTO);
-            return ResponseEntity.ok(outputDTO);
-        } catch (ResourceNotFoundException e) {
-            log.info("VehicleDealerResource/partialUpdate id: " + id + " notFound");
-            return ResponseEntity.notFound().build();
-        }
+        VehicleDealerOutputDTO outputDTO = service.partialUpdate(id, inputDTO);
+        return ResponseEntity.ok(outputDTO);
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<VehicleDealerOutputDTO> deleteById(@PathVariable Long id) {
+    public ResponseEntity<VehicleDealerOutputDTO> deleteById(@PathVariable Long id) throws ResourceNotFoundException {
         log.info("VehicleDealerResource/deleteById(" + id + ") was called");
-        try {
-            VehicleDealerOutputDTO outputDTO = service.deleteById(id);
-            return ResponseEntity.ok(outputDTO);
-        } catch (ResourceNotFoundException e) {
-            log.info("VehicleDealerResource/deleteById id: " + id + " notFound");
-            return ResponseEntity.notFound().build();
-        }
+        VehicleDealerOutputDTO outputDTO = service.deleteById(id);
+        return ResponseEntity.ok(outputDTO);
     }
 
 }
