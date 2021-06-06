@@ -9,15 +9,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RequiredArgsConstructor
 @Slf4j
-@Validated
 @RestController
 @RequestMapping(value = "/vehicle-dealer")
 public class VehicleDealerResource {
@@ -46,21 +43,21 @@ public class VehicleDealerResource {
     }
 
     @PostMapping
-    public ResponseEntity<VehicleDealerOutputDTO> save(@Valid @RequestBody VehicleDealerInputDTO inputDTO) {
+    public ResponseEntity<VehicleDealerOutputDTO> save(@RequestBody VehicleDealerInputDTO inputDTO) {
         log.info("VehicleDealerResource/save( " + objectMapper.writeValueAsStringNoException(inputDTO) + ") was called");
         VehicleDealerOutputDTO outputDTO = service.save(inputDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(outputDTO);
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<VehicleDealerOutputDTO> updateAll(@PathVariable Long id, @Valid @RequestBody VehicleDealerInputDTO inputDTO) throws ResourceNotFoundException {
+    public ResponseEntity<VehicleDealerOutputDTO> updateAll(@PathVariable Long id, @RequestBody VehicleDealerInputDTO inputDTO) throws ResourceNotFoundException {
         log.info("VehicleDealerResource/updateAll(id: " + id + " obj: " + objectMapper.writeValueAsStringNoException(inputDTO) + ") was called");
         VehicleDealerOutputDTO outputDTO = service.updateAll(id, inputDTO);
         return ResponseEntity.ok(outputDTO);
     }
 
     @PatchMapping(value = "/{id}")
-    public ResponseEntity<VehicleDealerOutputDTO> partialUpdate(@PathVariable Long id, @Valid @RequestBody VehicleDealerInputDTO inputDTO) throws ResourceNotFoundException {
+    public ResponseEntity<VehicleDealerOutputDTO> partialUpdate(@PathVariable Long id, @RequestBody VehicleDealerInputDTO inputDTO) throws ResourceNotFoundException {
         log.info("VehicleDealerResource/partialUpdate(id: " + id + " obj: " + objectMapper.writeValueAsStringNoException(inputDTO) + ") was called");
         VehicleDealerOutputDTO outputDTO = service.partialUpdate(id, inputDTO);
         return ResponseEntity.ok(outputDTO);

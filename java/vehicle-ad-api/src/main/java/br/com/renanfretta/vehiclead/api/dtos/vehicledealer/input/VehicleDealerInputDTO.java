@@ -3,6 +3,7 @@ package br.com.renanfretta.vehiclead.api.dtos.vehicledealer.input;
 import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
@@ -29,7 +30,7 @@ public class VehicleDealerInputDTO implements Serializable {
     @NotEmpty
     private String address;
 
-    @NotEmpty
+    @NotNull
     private Integer tierLimit;
 
 }

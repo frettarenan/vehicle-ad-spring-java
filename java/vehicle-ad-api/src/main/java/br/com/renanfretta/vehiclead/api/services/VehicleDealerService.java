@@ -13,6 +13,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 import static java.util.Objects.nonNull;
@@ -34,7 +37,7 @@ public class VehicleDealerService {
         return orikaMapper.mapAsList(list, VehicleDealerOutputDTO.class);
     }
 
-    public VehicleDealerOutputDTO findById(Long id) throws ResourceNotFoundException {
+    public VehicleDealerOutputDTO findById(@NotNull @Size(min = 1) Long id) throws ResourceNotFoundException {
         try {
             VehicleDealer entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(messagesProperty, VehicleDealer.class, id));
             log.info("VehicleDealerRepository/findById(" + id + ") was successful");
@@ -45,7 +48,7 @@ public class VehicleDealerService {
         }
     }
 
-    public VehicleDealerOutputDTO save(VehicleDealerInputDTO inputDTO) {
+    public VehicleDealerOutputDTO save(@Valid VehicleDealerInputDTO inputDTO) {
         VehicleDealer entity = orikaMapper.map(inputDTO, VehicleDealer.class);
 
         repository.save(entity);
@@ -54,11 +57,11 @@ public class VehicleDealerService {
         return orikaMapper.map(entity, VehicleDealerOutputDTO.class);
     }
 
-    private void validateVehicleDealerExists(Long id) throws ResourceNotFoundException {
+    private void validateVehicleDealerExists(@NotNull @Size(min = 1) Long id) throws ResourceNotFoundException {
         repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(messagesProperty, VehicleDealer.class, id));
     }
 
-    public VehicleDealerOutputDTO updateAll(Long id, VehicleDealerInputDTO inputDTO) throws ResourceNotFoundException {
+    public VehicleDealerOutputDTO updateAll(@NotNull @Size(min = 1) Long id, @Valid VehicleDealerInputDTO inputDTO) throws ResourceNotFoundException {
         validateVehicleDealerExists(id);
 
         VehicleDealer entity = orikaMapper.map(inputDTO, VehicleDealer.class);
@@ -70,7 +73,7 @@ public class VehicleDealerService {
         return orikaMapper.map(entity, VehicleDealerOutputDTO.class);
     }
 
-    public VehicleDealerOutputDTO partialUpdate(Long id, VehicleDealerInputDTO inputDTO) throws ResourceNotFoundException {
+    public VehicleDealerOutputDTO partialUpdate(@NotNull @Size(min = 1) Long id, @Valid VehicleDealerInputDTO inputDTO) throws ResourceNotFoundException {
         VehicleDealer entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(messagesProperty, VehicleDealer.class, id));
 
         if (nonNull(inputDTO.getName()))
@@ -94,7 +97,7 @@ public class VehicleDealerService {
         return orikaMapper.map(entity, VehicleDealerOutputDTO.class);
     }
 
-    public VehicleDealerOutputDTO deleteById(Long id) throws ResourceNotFoundException {
+    public VehicleDealerOutputDTO deleteById(@NotNull @Size(min = 1) Long id) throws ResourceNotFoundException {
         VehicleDealer entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(messagesProperty, VehicleDealer.class, id));
         repository.delete(entity);
         return orikaMapper.map(entity, VehicleDealerOutputDTO.class);

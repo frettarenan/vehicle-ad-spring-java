@@ -11,18 +11,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Size;
 import java.util.List;
 
 import static java.util.Objects.isNull;
 
 @RequiredArgsConstructor
 @Slf4j
-@Validated
 @RestController
 @RequestMapping(value = "/vehicle-ad")
 public class VehicleAdResource {
@@ -32,7 +28,7 @@ public class VehicleAdResource {
 
     @GetMapping
     @ResponseBody
-    public ResponseEntity<List<VehicleAdOutputDTO>> findByVehicleDealerAndState(@RequestParam(name = "vehicleDealerId") @Size(min = 1) Long vehicleDealerId,
+    public ResponseEntity<List<VehicleAdOutputDTO>> findByVehicleDealerAndState(@RequestParam(name = "vehicleDealerId") Long vehicleDealerId,
                                                                                 @RequestParam(name = "vehicleAdStateId", required = false) Short vehicleAdStateId) {
         log.info("VehicleAdResource/findByVehicleDealerAndState(" + vehicleDealerId + ", " + vehicleAdStateId + ") was called");
         List<VehicleAdOutputDTO> list = service.findByVehicleDealerAndState(vehicleDealerId, vehicleAdStateId);
@@ -45,14 +41,14 @@ public class VehicleAdResource {
     }
 
     @PostMapping
-    public ResponseEntity<VehicleAdOutputDTO> save(@Valid @RequestBody VehicleAdInsertInputDTO inputDTO) {
+    public ResponseEntity<VehicleAdOutputDTO> save(@RequestBody VehicleAdInsertInputDTO inputDTO) {
         log.info("VehicleAdResource/save( " + objectMapper.writeValueAsStringNoException(inputDTO) + ") was called");
         VehicleAdOutputDTO outputDTO = service.save(inputDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(outputDTO);
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<VehicleAdOutputDTO> updateAll(@PathVariable Long id, @Valid @RequestBody VehicleAdUpdateInputDTO inputDTO) throws ResourceNotFoundException {
+    public ResponseEntity<VehicleAdOutputDTO> updateAll(@PathVariable Long id, @RequestBody VehicleAdUpdateInputDTO inputDTO) throws ResourceNotFoundException {
         log.info("VehicleAdResource/updateAll(id: " + id + " obj: " + objectMapper.writeValueAsStringNoException(inputDTO) + ") was called");
         VehicleAdOutputDTO outputDTO = service.updateAll(id, inputDTO);
         return ResponseEntity.ok(outputDTO);

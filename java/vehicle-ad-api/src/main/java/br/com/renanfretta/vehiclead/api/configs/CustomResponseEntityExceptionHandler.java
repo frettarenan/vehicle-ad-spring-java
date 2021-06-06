@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.validation.ConstraintViolationException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -45,12 +46,20 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
         return handleExceptionInternal(e, errors, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
 
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<Object> handleConstraintViolationException(ConstraintViolationException e, WebRequest request) {
+        log.error(e.getMessage());
+        String userMessage = messagesProperty.getMessage(MessagesPropertyEnum.ERROR_DEFAULT);
+        List<ErrorOutputDTO> errors = Arrays.asList(ErrorOutputDTO.builder().userMessage(userMessage).developerMessage(e.getMessage()).build());
+        return handleExceptionInternal(e, errors, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    }
+
     @Override
     protected ResponseEntity<Object> handleMissingServletRequestParameter(MissingServletRequestParameterException e, HttpHeaders headers, HttpStatus status, WebRequest request) {
         log.error(e.getMessage());
         String userMessage = messagesProperty.getMessage(MessagesPropertyEnum.ERROR_DEFAULT);
         List<ErrorOutputDTO> errors = Arrays.asList(ErrorOutputDTO.builder().userMessage(userMessage).developerMessage(e.getMessage()).build());
-        return this.handleExceptionInternal(e, errors, headers, status, request);
+        return handleExceptionInternal(e, errors, headers, HttpStatus.BAD_REQUEST, request);
     }
 
     @Getter
