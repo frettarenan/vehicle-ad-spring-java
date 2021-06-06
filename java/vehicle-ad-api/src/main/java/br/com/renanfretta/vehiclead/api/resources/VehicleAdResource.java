@@ -1,13 +1,17 @@
 package br.com.renanfretta.vehiclead.api.resources;
 
+import br.com.renanfretta.vehiclead.api.commons.ObjectMapperSpecialized;
+import br.com.renanfretta.vehiclead.api.dtos.vehiclead.input.VehicleAdInputDTO;
 import br.com.renanfretta.vehiclead.api.dtos.vehiclead.output.VehicleAdOutputDTO;
 import br.com.renanfretta.vehiclead.api.services.VehicleAdService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Size;
 import java.util.List;
 
@@ -19,6 +23,7 @@ import java.util.List;
 public class VehicleAdResource {
 
     private final VehicleAdService service;
+    private final ObjectMapperSpecialized objectMapper;
 
     @GetMapping
     @ResponseBody
@@ -32,6 +37,13 @@ public class VehicleAdResource {
         }
         log.info("VehicleAdResource/findByVehicleDealerAndState(" + vehicleDealerId + ", " + vehicleAdStateId + " ok");
         return ResponseEntity.ok(list);
+    }
+
+    @PostMapping
+    public ResponseEntity<VehicleAdOutputDTO> save(@Valid @RequestBody VehicleAdInputDTO inputDTO) {
+        log.info("VehicleAdResource/save( " + objectMapper.writeValueAsStringNoException(inputDTO) + ") was called");
+        VehicleAdOutputDTO outputDTO = service.save(inputDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(outputDTO);
     }
 
 }

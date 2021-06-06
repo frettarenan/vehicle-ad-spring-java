@@ -7,9 +7,9 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public enum VehicleAdStateEnum {
 
-    DRAFT(1),
-    PUBLISHED(2);
+    DRAFT((short) 1),
+    PUBLISHED((short) 2);
 
-    private final int id;
+    private final short id;
 
 }

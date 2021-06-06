@@ -180,6 +180,33 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Save",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"brand\": \"Honda\",\r\n    \"model\": \"Civic\",\r\n    \"modelYear\": 2021,\r\n    \"manufacturingYear\": 2021,\r\n    \"color\": \"white\",\r\n    \"mileage\": 0,\r\n    \"used\": false,\r\n    \"vehicleDealer\": {\r\n        \"id\": 1\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/vehicle-ad",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"vehicle-ad"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}
