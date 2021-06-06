@@ -2,15 +2,15 @@ package br.com.renanfretta.vehiclead.api.services;
 
 import br.com.renanfretta.vehiclead.api.commons.MessagesProperty;
 import br.com.renanfretta.vehiclead.api.commons.ObjectMapperSpecialized;
+import br.com.renanfretta.vehiclead.api.exceptions.entity.ResourceNotFoundException;
 import br.com.renanfretta.vehiclead.api.configs.OrikaMapper;
 import br.com.renanfretta.vehiclead.api.dtos.vehiclead.input.VehicleAdInsertInputDTO;
 import br.com.renanfretta.vehiclead.api.dtos.vehiclead.input.VehicleAdUpdateInputDTO;
 import br.com.renanfretta.vehiclead.api.dtos.vehiclead.output.VehicleAdOutputDTO;
-import br.com.renanfretta.vehiclead.api.dtos.vehicledealer.output.VehicleDealerOutputDTO;
 import br.com.renanfretta.vehiclead.api.entities.VehicleAd;
 import br.com.renanfretta.vehiclead.api.entities.VehicleAdState;
 import br.com.renanfretta.vehiclead.api.enums.VehicleAdStateEnum;
-import br.com.renanfretta.vehiclead.api.exceptions.ResourceNotFoundException;
+import br.com.renanfretta.vehiclead.api.exceptions.vehiclead.VehicleAdAlreadyPublishedException;
 import br.com.renanfretta.vehiclead.api.repositories.vehiclead.VehicleAdRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -51,7 +51,7 @@ public class VehicleAdService {
     }
 
     public VehicleAdOutputDTO updateAll(Long id, VehicleAdUpdateInputDTO inputDTO) throws ResourceNotFoundException {
-        VehicleAd entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(messagesProperty.getErrorMessageResourceNotFoundFindById(VehicleAd.class, id)));
+        VehicleAd entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(messagesProperty, VehicleAd.class, id));
 
         entity.setBrand(inputDTO.getBrand());
         entity.setModel(inputDTO.getModel());
@@ -68,8 +68,10 @@ public class VehicleAdService {
         return orikaMapper.map(entity, VehicleAdOutputDTO.class);
     }
 
-    public VehicleAdOutputDTO publish(Long id, Boolean respectLimit) throws ResourceNotFoundException {
-        VehicleAd entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(messagesProperty.getErrorMessageResourceNotFoundFindById(VehicleAd.class, id)));
+    public VehicleAdOutputDTO publish(Long id, Boolean respectLimit) throws ResourceNotFoundException, VehicleAdAlreadyPublishedException {
+        VehicleAd entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(messagesProperty, VehicleAd.class, id));
+
+        validateVehicleAdAlreadyPublished(entity);
 
         // respectLimit >> true
         //  throw exception >> limit exceded
@@ -86,8 +88,13 @@ public class VehicleAdService {
         return orikaMapper.map(entity, VehicleAdOutputDTO.class);
     }
 
+    private void validateVehicleAdAlreadyPublished(VehicleAd entity) throws VehicleAdAlreadyPublishedException {
+        if (entity.getState().getId().equals(VehicleAdStateEnum.PUBLISHED.getId()))
+            throw new VehicleAdAlreadyPublishedException(messagesProperty, entity.getId());
+    }
+
     public VehicleAdOutputDTO unpublish(Long id) throws ResourceNotFoundException {
-        VehicleAd entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(messagesProperty.getErrorMessageResourceNotFoundFindById(VehicleAd.class, id)));
+        VehicleAd entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(messagesProperty, VehicleAd.class, id));
 
         entity.setState(VehicleAdState.builder().id(VehicleAdStateEnum.DRAFT.getId()).build());
         entity.setPublishedAt(null);

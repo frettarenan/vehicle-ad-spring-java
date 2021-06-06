@@ -3,7 +3,7 @@ package br.com.renanfretta.vehiclead.api.resources;
 import br.com.renanfretta.vehiclead.api.commons.ObjectMapperSpecialized;
 import br.com.renanfretta.vehiclead.api.dtos.vehicledealer.input.VehicleDealerInputDTO;
 import br.com.renanfretta.vehiclead.api.dtos.vehicledealer.output.VehicleDealerOutputDTO;
-import br.com.renanfretta.vehiclead.api.exceptions.ResourceNotFoundException;
+import br.com.renanfretta.vehiclead.api.exceptions.entity.ResourceNotFoundException;
 import br.com.renanfretta.vehiclead.api.services.VehicleDealerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

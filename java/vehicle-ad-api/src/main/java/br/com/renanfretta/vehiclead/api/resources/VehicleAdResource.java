@@ -4,7 +4,8 @@ import br.com.renanfretta.vehiclead.api.commons.ObjectMapperSpecialized;
 import br.com.renanfretta.vehiclead.api.dtos.vehiclead.input.VehicleAdInsertInputDTO;
 import br.com.renanfretta.vehiclead.api.dtos.vehiclead.input.VehicleAdUpdateInputDTO;
 import br.com.renanfretta.vehiclead.api.dtos.vehiclead.output.VehicleAdOutputDTO;
-import br.com.renanfretta.vehiclead.api.exceptions.ResourceNotFoundException;
+import br.com.renanfretta.vehiclead.api.exceptions.entity.ResourceNotFoundException;
+import br.com.renanfretta.vehiclead.api.exceptions.vehiclead.VehicleAdAlreadyPublishedException;
 import br.com.renanfretta.vehiclead.api.services.VehicleAdService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,10 +17,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
 import java.util.List;
-import java.util.Objects;
 
 import static java.util.Objects.isNull;
-import static java.util.Objects.nonNull;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -65,7 +64,7 @@ public class VehicleAdResource {
     }
 
     @PatchMapping(value = "/{id}/publish")
-    public ResponseEntity<VehicleAdOutputDTO> publish(@PathVariable Long id, @RequestParam(name = "respectLimit", required = false) String respectLimitStr) {
+    public ResponseEntity<VehicleAdOutputDTO> publish(@PathVariable Long id, @RequestParam(name = "respectLimit", required = false) String respectLimitStr) throws VehicleAdAlreadyPublishedException {
         boolean respectLimit = isNull(respectLimitStr) || !respectLimitStr.equalsIgnoreCase("false");
         log.info("VehicleAdResource/publish(id: " + id + " respectLimit: " + respectLimit + ") was called");
         try {
