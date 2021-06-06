@@ -62,7 +62,7 @@ public class VehicleDealerService {
         VehicleDealer entity = orikaMapper.map(inputDTO, VehicleDealer.class);
         entity.setId(id);
         entity = repository.save(entity);
-        log.info("VehicleDealerRepository/updateAll(" + objectMapper.writeValueAsStringNoException(entity) + ") was successful");
+        log.info("VehicleDealerRepository/save(" + objectMapper.writeValueAsStringNoException(entity) + ") was successful");
         return orikaMapper.map(entity, VehicleDealerOutputDTO.class);
     }
 

@@ -57,7 +57,7 @@ public class VehicleAdService {
         entity.setUsed(inputDTO.getUsed());
 
         entity = repository.save(entity);
-        log.info("VehicleAdRepository/updateAll(" + objectMapper.writeValueAsStringNoException(entity) + ") was successful");
+        log.info("VehicleAdRepository/save(" + objectMapper.writeValueAsStringNoException(entity) + ") was successful");
         return orikaMapper.map(entity, VehicleAdOutputDTO.class);
     }
 
