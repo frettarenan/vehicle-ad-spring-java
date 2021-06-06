@@ -6,6 +6,7 @@ import br.com.renanfretta.vehiclead.api.dtos.vehiclead.input.VehicleAdUpdateInpu
 import br.com.renanfretta.vehiclead.api.dtos.vehiclead.output.VehicleAdOutputDTO;
 import br.com.renanfretta.vehiclead.api.exceptions.entity.ResourceNotFoundException;
 import br.com.renanfretta.vehiclead.api.exceptions.vehiclead.VehicleAdAlreadyPublishedException;
+import br.com.renanfretta.vehiclead.api.exceptions.vehicledealer.VehicleDealerTierLimitExceededException;
 import br.com.renanfretta.vehiclead.api.services.VehicleAdService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -55,7 +56,7 @@ public class VehicleAdResource {
     }
 
     @PatchMapping(value = "/{id}/publish")
-    public ResponseEntity<VehicleAdOutputDTO> publish(@PathVariable Long id, @RequestParam(name = "respectLimit", required = false) String respectLimitStr) throws ResourceNotFoundException, VehicleAdAlreadyPublishedException {
+    public ResponseEntity<VehicleAdOutputDTO> publish(@PathVariable Long id, @RequestParam(name = "respectLimit", required = false) String respectLimitStr) throws ResourceNotFoundException, VehicleAdAlreadyPublishedException, VehicleDealerTierLimitExceededException {
         boolean respectLimit = isNull(respectLimitStr) || !respectLimitStr.equalsIgnoreCase("false");
         log.info("VehicleAdResource/publish(id: " + id + " respectLimit: " + respectLimit + ") was called");
         VehicleAdOutputDTO outputDTO = service.publish(id, respectLimit);

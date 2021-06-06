@@ -4,6 +4,7 @@ import br.com.renanfretta.vehiclead.api.entities.QVehicleAd;
 import br.com.renanfretta.vehiclead.api.entities.QVehicleAdState;
 import br.com.renanfretta.vehiclead.api.entities.QVehicleDealer;
 import br.com.renanfretta.vehiclead.api.entities.VehicleAd;
+import br.com.renanfretta.vehiclead.api.enums.VehicleAdStateEnum;
 import com.querydsl.jpa.impl.JPAQuery;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import java.util.List;
 
+import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 @RequiredArgsConstructor
@@ -35,6 +37,11 @@ public class VehicleAdRepositoryImpl implements VehicleAdRepositoryCustom {
 
         if (nonNull(vehicleAdStateId))
             query.where(_vehicleAdState.id.eq(vehicleAdStateId));
+
+        if (nonNull(vehicleAdStateId) && vehicleAdStateId.equals(VehicleAdStateEnum.PUBLISHED.getId()))
+            query.orderBy(_vehicleAd.publishedAt.desc());
+        else
+            query.orderBy(_vehicleAd.createdAt.desc());
 
         return query.fetch();
     }

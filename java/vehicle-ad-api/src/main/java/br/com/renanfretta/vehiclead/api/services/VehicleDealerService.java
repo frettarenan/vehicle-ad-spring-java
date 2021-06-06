@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
@@ -48,6 +50,7 @@ public class VehicleDealerService {
         }
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public VehicleDealerOutputDTO save(@Valid VehicleDealerInputDTO inputDTO) {
         VehicleDealer entity = orikaMapper.map(inputDTO, VehicleDealer.class);
 
@@ -61,6 +64,7 @@ public class VehicleDealerService {
         repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(messagesProperty, VehicleDealer.class, id));
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public VehicleDealerOutputDTO updateAll(@NotNull @Range(min = 1) Long id, @Valid VehicleDealerInputDTO inputDTO) throws ResourceNotFoundException {
         validateVehicleDealerExists(id);
 
@@ -73,6 +77,7 @@ public class VehicleDealerService {
         return orikaMapper.map(entity, VehicleDealerOutputDTO.class);
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public VehicleDealerOutputDTO partialUpdate(@NotNull @Range(min = 1) Long id, VehicleDealerInputDTO inputDTO) throws ResourceNotFoundException {
         VehicleDealer entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(messagesProperty, VehicleDealer.class, id));
 
@@ -97,6 +102,7 @@ public class VehicleDealerService {
         return orikaMapper.map(entity, VehicleDealerOutputDTO.class);
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public VehicleDealerOutputDTO deleteById(@NotNull @Range(min = 1) Long id) throws ResourceNotFoundException {
         VehicleDealer entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(messagesProperty, VehicleDealer.class, id));
         repository.delete(entity);
