@@ -1,7 +1,6 @@
 package br.com.renanfretta.vehiclead.api.dtos.vehiclead.output;
 
-import br.com.renanfretta.vehiclead.api.entities.VehicleAdState;
-import br.com.renanfretta.vehiclead.api.entities.VehicleDealer;
+import br.com.renanfretta.vehiclead.api.dtos.vehicleadstate.output.VehicleAdStateOutputDTO;
 import lombok.*;
 
 import java.io.Serializable;
@@ -23,7 +22,9 @@ public class VehicleAdOutputDTO implements Serializable {
     private String color;
     private Integer mileage;
     private Boolean used;
-    private VehicleDealer vehicleDealer;
-    private VehicleAdState state;
+    private VehicleAdStateOutputDTO state;
+    private String createdAt;
+    private String updatedAt;
+    private String publishedAt;
 
 }

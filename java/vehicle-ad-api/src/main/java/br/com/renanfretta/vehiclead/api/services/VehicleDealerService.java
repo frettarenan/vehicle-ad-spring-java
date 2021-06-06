@@ -47,7 +47,9 @@ public class VehicleDealerService {
 
     public VehicleDealerOutputDTO save(VehicleDealerInputDTO inputDTO) {
         VehicleDealer entity = orikaMapper.map(inputDTO, VehicleDealer.class);
-        entity = repository.save(entity);
+
+        repository.save(entity);
+        entity = repository.findById(entity.getId()).get();
         log.info("VehicleDealerRepository/save(" + objectMapper.writeValueAsStringNoException(entity) + ") was successful");
         return orikaMapper.map(entity, VehicleDealerOutputDTO.class);
     }
@@ -61,7 +63,9 @@ public class VehicleDealerService {
 
         VehicleDealer entity = orikaMapper.map(inputDTO, VehicleDealer.class);
         entity.setId(id);
-        entity = repository.save(entity);
+
+        repository.save(entity);
+        entity = repository.findById(entity.getId()).get();
         log.info("VehicleDealerRepository/save(" + objectMapper.writeValueAsStringNoException(entity) + ") was successful");
         return orikaMapper.map(entity, VehicleDealerOutputDTO.class);
     }
@@ -84,7 +88,8 @@ public class VehicleDealerService {
         if (nonNull(inputDTO.getTierLimit()))
             entity.setTierLimit(inputDTO.getTierLimit());
 
-        entity = repository.save(entity);
+        repository.save(entity);
+        entity = repository.findById(entity.getId()).get();
         log.info("VehicleDealerRepository/partialUpdate(" + objectMapper.writeValueAsStringNoException(entity) + ") was successful");
         return orikaMapper.map(entity, VehicleDealerOutputDTO.class);
     }

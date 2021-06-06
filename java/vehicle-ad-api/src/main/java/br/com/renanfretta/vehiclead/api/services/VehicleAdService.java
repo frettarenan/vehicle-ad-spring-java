@@ -19,6 +19,7 @@ import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
@@ -40,8 +41,11 @@ public class VehicleAdService {
 
     public VehicleAdOutputDTO save(VehicleAdInsertInputDTO inputDTO) {
         VehicleAd entity = orikaMapper.map(inputDTO, VehicleAd.class);
+
         entity.setState(VehicleAdState.builder().id(VehicleAdStateEnum.DRAFT.getId()).build());
-        entity = repository.save(entity);
+
+        repository.save(entity);
+        entity = repository.findById(entity.getId()).get();
         log.info("VehicleAdRepository/save(" + objectMapper.writeValueAsStringNoException(entity) + ") was successful");
         return orikaMapper.map(entity, VehicleAdOutputDTO.class);
     }
@@ -56,8 +60,10 @@ public class VehicleAdService {
         entity.setColor(inputDTO.getColor());
         entity.setMileage(inputDTO.getMileage());
         entity.setUsed(inputDTO.getUsed());
+        entity.setUpdatedAt(LocalDateTime.now());
 
-        entity = repository.save(entity);
+        repository.save(entity);
+        entity = repository.findById(entity.getId()).get();
         log.info("VehicleAdRepository/save(" + objectMapper.writeValueAsStringNoException(entity) + ") was successful");
         return orikaMapper.map(entity, VehicleAdOutputDTO.class);
     }
@@ -65,9 +71,17 @@ public class VehicleAdService {
     public VehicleAdOutputDTO publish(Long id, Boolean respectLimit) throws ResourceNotFoundException {
         VehicleAd entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(messagesProperty.getErrorMessageResourceNotFoundFindById(VehicleAd.class, id)));
 
-        entity.setState(VehicleAdState.builder().id(VehicleAdStateEnum.PUBLISHED.getId()).build());
+        // respectLimit >> true
+        //  throw exception >> limit exceded
 
-        entity = repository.save(entity);
+        // else respectLimit >> false
+        //   unpublish last ad
+
+        entity.setState(VehicleAdState.builder().id(VehicleAdStateEnum.PUBLISHED.getId()).build());
+        entity.setPublishedAt(LocalDateTime.now());
+
+        repository.save(entity);
+        entity = repository.findById(entity.getId()).get();
         log.info("VehicleAdRepository/save(" + objectMapper.writeValueAsStringNoException(entity) + ") was successful");
         return orikaMapper.map(entity, VehicleAdOutputDTO.class);
     }
@@ -76,8 +90,10 @@ public class VehicleAdService {
         VehicleAd entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(messagesProperty.getErrorMessageResourceNotFoundFindById(VehicleAd.class, id)));
 
         entity.setState(VehicleAdState.builder().id(VehicleAdStateEnum.DRAFT.getId()).build());
+        entity.setPublishedAt(null);
 
-        entity = repository.save(entity);
+        repository.save(entity);
+        entity = repository.findById(entity.getId()).get();
         log.info("VehicleAdRepository/save(" + objectMapper.writeValueAsStringNoException(entity) + ") was successful");
         return orikaMapper.map(entity, VehicleAdOutputDTO.class);
     }
