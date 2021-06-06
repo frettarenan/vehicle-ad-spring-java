@@ -16,6 +16,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
 import java.util.List;
+import java.util.Objects;
+
+import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -56,6 +60,31 @@ public class VehicleAdResource {
             return ResponseEntity.ok(outputDTO);
         } catch (ResourceNotFoundException e) {
             log.info("VehicleAdResource/updateAll id: " + id + " notFound");
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PatchMapping(value = "/{id}/publish")
+    public ResponseEntity<VehicleAdOutputDTO> publish(@PathVariable Long id, @RequestParam(name = "respectLimit", required = false) String respectLimitStr) {
+        boolean respectLimit = isNull(respectLimitStr) || !respectLimitStr.equalsIgnoreCase("false");
+        log.info("VehicleAdResource/publish(id: " + id + " respectLimit: " + respectLimit + ") was called");
+        try {
+            VehicleAdOutputDTO outputDTO = service.publish(id, respectLimit);
+            return ResponseEntity.ok(outputDTO);
+        } catch (ResourceNotFoundException e) {
+            log.info("VehicleAdResource/publish id: " + id + " notFound");
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PatchMapping(value = "/{id}/unpublish")
+    public ResponseEntity<VehicleAdOutputDTO> unpublish(@PathVariable Long id) {
+        log.info("VehicleAdResource/unpublish(" + id + ") was called");
+        try {
+            VehicleAdOutputDTO outputDTO = service.unpublish(id);
+            return ResponseEntity.ok(outputDTO);
+        } catch (ResourceNotFoundException e) {
+            log.info("VehicleAdResource/unpublish id: " + id + " notFound");
             return ResponseEntity.notFound().build();
         }
     }

@@ -6,6 +6,7 @@ import br.com.renanfretta.vehiclead.api.configs.OrikaMapper;
 import br.com.renanfretta.vehiclead.api.dtos.vehiclead.input.VehicleAdInsertInputDTO;
 import br.com.renanfretta.vehiclead.api.dtos.vehiclead.input.VehicleAdUpdateInputDTO;
 import br.com.renanfretta.vehiclead.api.dtos.vehiclead.output.VehicleAdOutputDTO;
+import br.com.renanfretta.vehiclead.api.dtos.vehicledealer.output.VehicleDealerOutputDTO;
 import br.com.renanfretta.vehiclead.api.entities.VehicleAd;
 import br.com.renanfretta.vehiclead.api.entities.VehicleAdState;
 import br.com.renanfretta.vehiclead.api.enums.VehicleAdStateEnum;
@@ -55,6 +56,26 @@ public class VehicleAdService {
         entity.setColor(inputDTO.getColor());
         entity.setMileage(inputDTO.getMileage());
         entity.setUsed(inputDTO.getUsed());
+
+        entity = repository.save(entity);
+        log.info("VehicleAdRepository/save(" + objectMapper.writeValueAsStringNoException(entity) + ") was successful");
+        return orikaMapper.map(entity, VehicleAdOutputDTO.class);
+    }
+
+    public VehicleAdOutputDTO publish(Long id, Boolean respectLimit) throws ResourceNotFoundException {
+        VehicleAd entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(messagesProperty.getErrorMessageResourceNotFoundFindById(VehicleAd.class, id)));
+
+        entity.setState(VehicleAdState.builder().id(VehicleAdStateEnum.PUBLISHED.getId()).build());
+
+        entity = repository.save(entity);
+        log.info("VehicleAdRepository/save(" + objectMapper.writeValueAsStringNoException(entity) + ") was successful");
+        return orikaMapper.map(entity, VehicleAdOutputDTO.class);
+    }
+
+    public VehicleAdOutputDTO unpublish(Long id) throws ResourceNotFoundException {
+        VehicleAd entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(messagesProperty.getErrorMessageResourceNotFoundFindById(VehicleAd.class, id)));
+
+        entity.setState(VehicleAdState.builder().id(VehicleAdStateEnum.DRAFT.getId()).build());
 
         entity = repository.save(entity);
         log.info("VehicleAdRepository/save(" + objectMapper.writeValueAsStringNoException(entity) + ") was successful");
