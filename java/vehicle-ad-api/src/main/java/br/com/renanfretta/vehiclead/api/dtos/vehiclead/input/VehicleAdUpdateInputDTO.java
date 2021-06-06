@@ -1,7 +1,5 @@
 package br.com.renanfretta.vehiclead.api.dtos.vehiclead.input;
 
-import br.com.renanfretta.vehiclead.api.dtos.vehicledealer.output.VehicleDealerOutputDTO;
-import br.com.renanfretta.vehiclead.api.entities.VehicleDealer;
 import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
@@ -13,7 +11,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class VehicleAdInputDTO implements Serializable {
+public class VehicleAdUpdateInputDTO implements Serializable {
 
     @Size(max = 50)
     @NotEmpty
@@ -37,8 +35,5 @@ public class VehicleAdInputDTO implements Serializable {
 
     @NotEmpty
     private Boolean used;
-
-    @NotEmpty
-    private VehicleDealerOutputDTO vehicleDealer;
 
 }

@@ -25,8 +25,8 @@ public class VehicleDealerService {
 
     private final VehicleDealerRepository repository;
     private final OrikaMapper orikaMapper;
-    private final MessagesProperty messagesProperty;
     private final ObjectMapperSpecialized objectMapper;
+    private final MessagesProperty messagesProperty;
 
     public List<VehicleDealerOutputDTO> findAll() {
         List<VehicleDealer> list = repository.findAll();

@@ -1,8 +1,11 @@
 package br.com.renanfretta.vehiclead.api.configs;
 
 import br.com.renanfretta.vehiclead.api.commons.OrikaMapperBase;
+import br.com.renanfretta.vehiclead.api.dtos.vehiclead.input.VehicleAdInsertInputDTO;
+import br.com.renanfretta.vehiclead.api.dtos.vehiclead.input.VehicleAdUpdateInputDTO;
 import br.com.renanfretta.vehiclead.api.dtos.vehicledealer.input.VehicleDealerInputDTO;
 import br.com.renanfretta.vehiclead.api.dtos.vehicledealer.output.VehicleDealerOutputDTO;
+import br.com.renanfretta.vehiclead.api.entities.VehicleAd;
 import br.com.renanfretta.vehiclead.api.entities.VehicleDealer;
 import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.impl.DefaultMapperFactory;
@@ -34,6 +37,29 @@ public class OrikaMapper extends OrikaMapperBase {
                 .field("email", "email")
                 .field("address", "address")
                 .field("tierLimit", "tierLimit")
+                .byDefault().register();
+
+        factory.classMap(VehicleAdInsertInputDTO.class, VehicleAd.class)
+                .constructorA().constructorB().mapNulls(true).mapNullsInReverse(true)
+                .field("brand", "brand")
+                .field("model", "model")
+                .field("modelYear", "modelYear")
+                .field("manufacturingYear", "manufacturingYear")
+                .field("color", "color")
+                .field("mileage", "mileage")
+                .field("used", "used")
+                .field("vehicleDealer", "vehicleDealer")
+                .byDefault().register();
+
+        factory.classMap(VehicleAdUpdateInputDTO.class, VehicleAd.class)
+                .constructorA().constructorB().mapNulls(true).mapNullsInReverse(true)
+                .field("brand", "brand")
+                .field("model", "model")
+                .field("modelYear", "modelYear")
+                .field("manufacturingYear", "manufacturingYear")
+                .field("color", "color")
+                .field("mileage", "mileage")
+                .field("used", "used")
                 .byDefault().register();
 
         mapperFacade = factory.getMapperFacade();

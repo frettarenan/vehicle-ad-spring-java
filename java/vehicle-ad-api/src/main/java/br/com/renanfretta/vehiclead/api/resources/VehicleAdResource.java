@@ -1,8 +1,10 @@
 package br.com.renanfretta.vehiclead.api.resources;
 
 import br.com.renanfretta.vehiclead.api.commons.ObjectMapperSpecialized;
-import br.com.renanfretta.vehiclead.api.dtos.vehiclead.input.VehicleAdInputDTO;
+import br.com.renanfretta.vehiclead.api.dtos.vehiclead.input.VehicleAdInsertInputDTO;
+import br.com.renanfretta.vehiclead.api.dtos.vehiclead.input.VehicleAdUpdateInputDTO;
 import br.com.renanfretta.vehiclead.api.dtos.vehiclead.output.VehicleAdOutputDTO;
+import br.com.renanfretta.vehiclead.api.exceptions.ResourceNotFoundException;
 import br.com.renanfretta.vehiclead.api.services.VehicleAdService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,10 +42,22 @@ public class VehicleAdResource {
     }
 
     @PostMapping
-    public ResponseEntity<VehicleAdOutputDTO> save(@Valid @RequestBody VehicleAdInputDTO inputDTO) {
+    public ResponseEntity<VehicleAdOutputDTO> save(@Valid @RequestBody VehicleAdInsertInputDTO inputDTO) {
         log.info("VehicleAdResource/save( " + objectMapper.writeValueAsStringNoException(inputDTO) + ") was called");
         VehicleAdOutputDTO outputDTO = service.save(inputDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(outputDTO);
+    }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<VehicleAdOutputDTO> updateAll(@PathVariable Long id, @Valid @RequestBody VehicleAdUpdateInputDTO inputDTO) {
+        log.info("VehicleAdResource/updateAll(id: " + id + " obj: " + objectMapper.writeValueAsStringNoException(inputDTO) + ") was called");
+        try {
+            VehicleAdOutputDTO outputDTO = service.updateAll(id, inputDTO);
+            return ResponseEntity.ok(outputDTO);
+        } catch (ResourceNotFoundException e) {
+            log.info("VehicleAdResource/updateAll id: " + id + " notFound");
+            return ResponseEntity.notFound().build();
+        }
     }
 
 }

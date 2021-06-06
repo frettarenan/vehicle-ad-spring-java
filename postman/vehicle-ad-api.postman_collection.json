@@ -207,6 +207,34 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "UpdateAll",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"brand\": \"Jeep\",\r\n    \"model\": \"Compass\",\r\n    \"modelYear\": 2018,\r\n    \"manufacturingYear\": 2019,\r\n    \"color\": \"black\",\r\n    \"mileage\": 9541,\r\n    \"used\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/vehicle-ad/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"vehicle-ad",
+								"1"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}
