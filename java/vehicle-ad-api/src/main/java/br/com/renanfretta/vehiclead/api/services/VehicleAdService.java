@@ -14,12 +14,12 @@ import br.com.renanfretta.vehiclead.api.exceptions.vehiclead.VehicleAdAlreadyPub
 import br.com.renanfretta.vehiclead.api.repositories.vehiclead.VehicleAdRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.validator.constraints.Range;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -34,7 +34,7 @@ public class VehicleAdService {
     private final ObjectMapperSpecialized objectMapper;
     private final MessagesProperty messagesProperty;
 
-    public List<VehicleAdOutputDTO> findByVehicleDealerAndState(@NotNull @Size(min = 1) Long vehicleDealerId, @NotNull @Size(min = 1) Short vehicleAdStateId) {
+    public List<VehicleAdOutputDTO> findByVehicleDealerAndState(@NotNull @Range(min = 1) Long vehicleDealerId, Short vehicleAdStateId) {
         List<VehicleAd> list = repository.findByVehicleDealerAndState(vehicleDealerId, vehicleAdStateId);
         log.info("VehicleAdRepository/findByVehicleDealerAndState(" + vehicleDealerId + ", " + vehicleAdStateId + ") was successful");
         return orikaMapper.mapAsList(list, VehicleAdOutputDTO.class);
@@ -45,13 +45,15 @@ public class VehicleAdService {
 
         entity.setState(VehicleAdState.builder().id(VehicleAdStateEnum.DRAFT.getId()).build());
 
+        entity.setCreatedAt(LocalDateTime.now());
         repository.save(entity);
+
         entity = repository.findById(entity.getId()).get();
         log.info("VehicleAdRepository/save(" + objectMapper.writeValueAsStringNoException(entity) + ") was successful");
         return orikaMapper.map(entity, VehicleAdOutputDTO.class);
     }
 
-    public VehicleAdOutputDTO updateAll(@NotNull @Size(min = 1) Long id, @Valid VehicleAdUpdateInputDTO inputDTO) throws ResourceNotFoundException {
+    public VehicleAdOutputDTO updateAll(@NotNull @Range(min = 1) Long id, @Valid VehicleAdUpdateInputDTO inputDTO) throws ResourceNotFoundException {
         VehicleAd entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(messagesProperty, VehicleAd.class, id));
 
         entity.setBrand(inputDTO.getBrand());
@@ -61,15 +63,16 @@ public class VehicleAdService {
         entity.setColor(inputDTO.getColor());
         entity.setMileage(inputDTO.getMileage());
         entity.setUsed(inputDTO.getUsed());
-        entity.setUpdatedAt(LocalDateTime.now());
 
+        entity.setUpdatedAt(LocalDateTime.now());
         repository.save(entity);
+
         entity = repository.findById(entity.getId()).get();
         log.info("VehicleAdRepository/save(" + objectMapper.writeValueAsStringNoException(entity) + ") was successful");
         return orikaMapper.map(entity, VehicleAdOutputDTO.class);
     }
 
-    public VehicleAdOutputDTO publish(@NotNull @Size(min = 1) Long id, @NotNull Boolean respectLimit) throws ResourceNotFoundException, VehicleAdAlreadyPublishedException {
+    public VehicleAdOutputDTO publish(@NotNull @Range(min = 1) Long id, @NotNull Boolean respectLimit) throws ResourceNotFoundException, VehicleAdAlreadyPublishedException {
         VehicleAd entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(messagesProperty, VehicleAd.class, id));
 
         validateVehicleAdAlreadyPublished(entity);
@@ -94,7 +97,7 @@ public class VehicleAdService {
             throw new VehicleAdAlreadyPublishedException(messagesProperty, entity.getId());
     }
 
-    public VehicleAdOutputDTO unpublish(@NotNull @Size(min = 1) Long id) throws ResourceNotFoundException {
+    public VehicleAdOutputDTO unpublish(@NotNull @Range(min = 1) Long id) throws ResourceNotFoundException {
         VehicleAd entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(messagesProperty, VehicleAd.class, id));
 
         entity.setState(VehicleAdState.builder().id(VehicleAdStateEnum.DRAFT.getId()).build());

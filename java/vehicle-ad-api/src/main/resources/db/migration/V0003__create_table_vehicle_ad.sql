@@ -9,7 +9,7 @@ CREATE TABLE vehicle_ad (
     used bit(1) NOT NULL,
     id_vehicle_ad_state int(2) NOT NULL,
     id_vehicle_dealer bigint(20) NOT NULL,
-    created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    created_at timestamp NOT NULL,
     updated_at timestamp NULL DEFAULT NULL,
     published_at timestamp NULL DEFAULT NULL,
     PRIMARY KEY (id),
