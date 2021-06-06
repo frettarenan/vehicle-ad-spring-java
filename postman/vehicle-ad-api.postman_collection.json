@@ -242,7 +242,7 @@
 						"method": "PATCH",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/vehicle-ad/1/publish",
+							"raw": "localhost:8080/vehicle-ad/1/publish?respectLimit=true",
 							"host": [
 								"localhost"
 							],
@@ -251,18 +251,24 @@
 								"vehicle-ad",
 								"1",
 								"publish"
+							],
+							"query": [
+								{
+									"key": "respectLimit",
+									"value": "true"
+								}
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Publish - respectLimit TRUE Copy",
+					"name": "Publish - respectLimit FALSE",
 					"request": {
 						"method": "PATCH",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/vehicle-ad/1/publish",
+							"raw": "localhost:8080/vehicle-ad/1/publish?respectLimit=false",
 							"host": [
 								"localhost"
 							],
@@ -271,6 +277,12 @@
 								"vehicle-ad",
 								"1",
 								"publish"
+							],
+							"query": [
+								{
+									"key": "respectLimit",
+									"value": "false"
+								}
 							]
 						}
 					},
