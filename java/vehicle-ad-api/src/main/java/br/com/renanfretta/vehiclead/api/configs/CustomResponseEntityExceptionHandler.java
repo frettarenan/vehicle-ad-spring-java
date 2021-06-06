@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -42,6 +43,14 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
         log.info(developerMessage);
         List<ErrorOutputDTO> errors = Arrays.asList(ErrorOutputDTO.builder().userMessage(userMessage).developerMessage(developerMessage).build());
         return handleExceptionInternal(e, errors, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleMissingServletRequestParameter(MissingServletRequestParameterException e, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        log.error(e.getMessage());
+        String userMessage = messagesProperty.getMessage(MessagesPropertyEnum.ERROR_DEFAULT);
+        List<ErrorOutputDTO> errors = Arrays.asList(ErrorOutputDTO.builder().userMessage(userMessage).developerMessage(e.getMessage()).build());
+        return this.handleExceptionInternal(e, errors, headers, status, request);
     }
 
     @Getter
