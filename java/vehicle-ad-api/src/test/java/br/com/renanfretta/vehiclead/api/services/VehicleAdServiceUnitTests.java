@@ -28,14 +28,14 @@ import java.util.Optional;
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = AutowiredTestsConfig.class)
 @DisplayName("Vehicle Dealer Service Tests")
-public class VehicleAdServiceTests {
+public class VehicleAdServiceUnitTests {
 
     private final OrikaMapper orikaMapper;
     private final ObjectMapperSpecialized objectMapper;
     private final MessagesProperty messagesProperty;
 
     @Autowired
-    public VehicleAdServiceTests(OrikaMapper orikaMapper, ObjectMapperSpecialized objectMapper, MessagesProperty messagesProperty) {
+    public VehicleAdServiceUnitTests(OrikaMapper orikaMapper, ObjectMapperSpecialized objectMapper, MessagesProperty messagesProperty) {
         this.orikaMapper = orikaMapper;
         this.objectMapper = objectMapper;
         this.messagesProperty = messagesProperty;
