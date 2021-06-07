@@ -8,6 +8,7 @@ import br.com.renanfretta.vehiclead.api.exceptions.entity.ResourceNotFoundExcept
 import br.com.renanfretta.vehiclead.api.exceptions.vehiclead.VehicleAdAlreadyPublishedException;
 import br.com.renanfretta.vehiclead.api.exceptions.vehicledealer.VehicleDealerTierLimitExceededException;
 import br.com.renanfretta.vehiclead.api.services.VehicleAdService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -28,7 +29,7 @@ public class VehicleAdResource {
     private final ObjectMapperSpecialized objectMapper;
 
     @GetMapping
-    @ResponseBody
+    @Operation(summary = "Find by vehicleDealerId and vehicleAdStateId")
     public ResponseEntity<List<VehicleAdOutputDTO>> findByVehicleDealerAndState(@RequestParam(name = "vehicleDealerId") Long vehicleDealerId,
                                                                                 @RequestParam(name = "vehicleAdStateId", required = false) Short vehicleAdStateId) {
         log.info("VehicleAdResource/findByVehicleDealerAndState(" + vehicleDealerId + ", " + vehicleAdStateId + ") was called");
@@ -42,6 +43,7 @@ public class VehicleAdResource {
     }
 
     @PostMapping
+    @Operation(summary = "Save new")
     public ResponseEntity<VehicleAdOutputDTO> save(@RequestBody VehicleAdInsertInputDTO inputDTO) {
         log.info("VehicleAdResource/save( " + objectMapper.writeValueAsStringNoException(inputDTO) + ") was called");
         VehicleAdOutputDTO outputDTO = service.save(inputDTO);
@@ -49,6 +51,7 @@ public class VehicleAdResource {
     }
 
     @PutMapping(value = "/{id}")
+    @Operation(summary = "Update all")
     public ResponseEntity<VehicleAdOutputDTO> updateAll(@PathVariable Long id, @RequestBody VehicleAdUpdateInputDTO inputDTO) throws ResourceNotFoundException {
         log.info("VehicleAdResource/updateAll(id: " + id + " obj: " + objectMapper.writeValueAsStringNoException(inputDTO) + ") was called");
         VehicleAdOutputDTO outputDTO = service.updateAll(id, inputDTO);
@@ -56,6 +59,7 @@ public class VehicleAdResource {
     }
 
     @PatchMapping(value = "/{id}/publish")
+    @Operation(summary = "Publish")
     public ResponseEntity<VehicleAdOutputDTO> publish(@PathVariable Long id, @RequestParam(name = "respectLimit", required = false) String respectLimitStr) throws ResourceNotFoundException, VehicleAdAlreadyPublishedException, VehicleDealerTierLimitExceededException {
         boolean respectLimit = isNull(respectLimitStr) || !respectLimitStr.equalsIgnoreCase("false");
         log.info("VehicleAdResource/publish(id: " + id + " respectLimit: " + respectLimit + ") was called");
@@ -64,6 +68,7 @@ public class VehicleAdResource {
     }
 
     @PatchMapping(value = "/{id}/unpublish")
+    @Operation(summary = "Unpublish")
     public ResponseEntity<VehicleAdOutputDTO> unpublish(@PathVariable Long id) throws ResourceNotFoundException {
         log.info("VehicleAdResource/unpublish(" + id + ") was called");
         VehicleAdOutputDTO outputDTO = service.unpublish(id);
