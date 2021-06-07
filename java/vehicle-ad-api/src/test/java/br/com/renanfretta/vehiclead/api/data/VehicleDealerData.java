@@ -35,7 +35,7 @@ public class VehicleDealerData {
         return Optional.of(getVehicleDealer01());
     }
 
-    private static VehicleDealerOutputDTO getVehicleDealerOutputDTO01() {
+    public static VehicleDealerOutputDTO getVehicleDealerOutputDTO01() {
         return VehicleDealerOutputDTO.builder()
                 .id(1L)
                 .name("Test Name")

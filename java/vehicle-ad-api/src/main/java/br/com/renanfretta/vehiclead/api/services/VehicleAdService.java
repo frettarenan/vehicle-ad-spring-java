@@ -50,7 +50,7 @@ public class VehicleAdService {
         entity.setState(VehicleAdState.builder().id(VehicleAdStateEnum.DRAFT.getId()).build());
 
         entity.setCreatedAt(LocalDateTime.now());
-        repository.save(entity);
+        entity = repository.save(entity);
 
         entity = repository.findById(entity.getId()).get();
         log.info("VehicleAdRepository/save(" + objectMapper.writeValueAsStringNoException(entity) + ") was successful");

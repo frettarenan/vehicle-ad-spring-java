@@ -66,6 +66,8 @@ public class VehicleDealerService {
         VehicleDealer entity = orikaMapper.map(inputDTO, VehicleDealer.class);
         entity.setId(id);
 
+        // FIXME: Validate business rule: TierLimit VS published advertisements
+
         repository.save(entity);
         entity = repository.findById(entity.getId()).get();
         log.info("VehicleDealerRepository/save(" + objectMapper.writeValueAsStringNoException(entity) + ") was successful");
@@ -88,6 +90,7 @@ public class VehicleDealerService {
         if (nonNull(inputDTO.getAddress()))
             entity.setAddress(inputDTO.getAddress());
 
+        // FIXME: Validate business rule: TierLimit VS published advertisements
         if (nonNull(inputDTO.getTierLimit()))
             entity.setTierLimit(inputDTO.getTierLimit());
 
