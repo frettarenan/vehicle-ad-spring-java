@@ -1,6 +1,7 @@
 package br.com.renanfretta.vehiclead.api.resources;
 
 import br.com.renanfretta.vehiclead.api.commons.ObjectMapperSpecialized;
+import br.com.renanfretta.vehiclead.api.configs.CustomResponseEntityExceptionHandler;
 import br.com.renanfretta.vehiclead.api.dtos.vehiclead.input.VehicleAdInsertInputDTO;
 import br.com.renanfretta.vehiclead.api.dtos.vehiclead.input.VehicleAdUpdateInputDTO;
 import br.com.renanfretta.vehiclead.api.dtos.vehiclead.output.VehicleAdOutputDTO;
@@ -9,6 +10,12 @@ import br.com.renanfretta.vehiclead.api.exceptions.vehiclead.VehicleAdAlreadyPub
 import br.com.renanfretta.vehiclead.api.exceptions.vehicledealer.VehicleDealerTierLimitExceededException;
 import br.com.renanfretta.vehiclead.api.services.VehicleAdService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -30,8 +37,13 @@ public class VehicleAdResource {
 
     @GetMapping
     @Operation(summary = "Find by vehicleDealerId and vehicleAdStateId")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful", content = {@Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = VehicleAdOutputDTO.class)))}),
+            @ApiResponse(responseCode = "204", description = "No content", content = @Content),
+            @ApiResponse(responseCode = "400", description = "Bad request", content = {@Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = CustomResponseEntityExceptionHandler.ErrorOutputDTO.class)))})
+    })
     public ResponseEntity<List<VehicleAdOutputDTO>> findByVehicleDealerAndState(@RequestParam(name = "vehicleDealerId") Long vehicleDealerId,
-                                                                                @RequestParam(name = "vehicleAdStateId", required = false) Short vehicleAdStateId) {
+                                                                                @RequestParam(name = "vehicleAdStateId", required = false) @Parameter(description="null: all, 1: draft and 2: published") Short vehicleAdStateId) {
         log.info("VehicleAdResource/findByVehicleDealerAndState(" + vehicleDealerId + ", " + vehicleAdStateId + ") was called");
         List<VehicleAdOutputDTO> list = service.findByVehicleDealerAndState(vehicleDealerId, vehicleAdStateId);
         if (list == null || list.isEmpty()) {
@@ -44,6 +56,10 @@ public class VehicleAdResource {
 
     @PostMapping
     @Operation(summary = "Save new")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = VehicleAdOutputDTO.class))}),
+            @ApiResponse(responseCode = "400", description = "Bad request", content = {@Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = CustomResponseEntityExceptionHandler.ErrorOutputDTO.class)))})
+    })
     public ResponseEntity<VehicleAdOutputDTO> save(@RequestBody VehicleAdInsertInputDTO inputDTO) {
         log.info("VehicleAdResource/save( " + objectMapper.writeValueAsStringNoException(inputDTO) + ") was called");
         VehicleAdOutputDTO outputDTO = service.save(inputDTO);
@@ -52,6 +68,11 @@ public class VehicleAdResource {
 
     @PutMapping(value = "/{id}")
     @Operation(summary = "Update all")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = VehicleAdOutputDTO.class))}),
+            @ApiResponse(responseCode = "204", description = "No content", content = @Content),
+            @ApiResponse(responseCode = "400", description = "Bad request", content = {@Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = CustomResponseEntityExceptionHandler.ErrorOutputDTO.class)))})
+    })
     public ResponseEntity<VehicleAdOutputDTO> updateAll(@PathVariable Long id, @RequestBody VehicleAdUpdateInputDTO inputDTO) throws ResourceNotFoundException {
         log.info("VehicleAdResource/updateAll(id: " + id + " obj: " + objectMapper.writeValueAsStringNoException(inputDTO) + ") was called");
         VehicleAdOutputDTO outputDTO = service.updateAll(id, inputDTO);
@@ -60,7 +81,13 @@ public class VehicleAdResource {
 
     @PatchMapping(value = "/{id}/publish")
     @Operation(summary = "Publish")
-    public ResponseEntity<VehicleAdOutputDTO> publish(@PathVariable Long id, @RequestParam(name = "respectLimit", required = false) String respectLimitStr) throws ResourceNotFoundException, VehicleAdAlreadyPublishedException, VehicleDealerTierLimitExceededException {
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = VehicleAdOutputDTO.class))}),
+            @ApiResponse(responseCode = "204", description = "No content", content = @Content),
+            @ApiResponse(responseCode = "400", description = "Bad request", content = {@Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = CustomResponseEntityExceptionHandler.ErrorOutputDTO.class)))}),
+            @ApiResponse(responseCode = "422", description = "Business rule", content = {@Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = CustomResponseEntityExceptionHandler.ErrorOutputDTO.class)))})
+    })
+    public ResponseEntity<VehicleAdOutputDTO> publish(@PathVariable Long id, @RequestParam(name = "respectLimit", required = false) @Parameter(description="true - false") String respectLimitStr) throws ResourceNotFoundException, VehicleAdAlreadyPublishedException, VehicleDealerTierLimitExceededException {
         boolean respectLimit = isNull(respectLimitStr) || !respectLimitStr.equalsIgnoreCase("false");
         log.info("VehicleAdResource/publish(id: " + id + " respectLimit: " + respectLimit + ") was called");
         VehicleAdOutputDTO outputDTO = service.publish(id, respectLimit);
@@ -69,6 +96,10 @@ public class VehicleAdResource {
 
     @PatchMapping(value = "/{id}/unpublish")
     @Operation(summary = "Unpublish")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = VehicleAdOutputDTO.class))}),
+            @ApiResponse(responseCode = "204", description = "No content", content = @Content)
+    })
     public ResponseEntity<VehicleAdOutputDTO> unpublish(@PathVariable Long id) throws ResourceNotFoundException {
         log.info("VehicleAdResource/unpublish(" + id + ") was called");
         VehicleAdOutputDTO outputDTO = service.unpublish(id);

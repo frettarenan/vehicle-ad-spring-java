@@ -1,6 +1,7 @@
 package br.com.renanfretta.vehiclead.api.resources;
 
 import br.com.renanfretta.vehiclead.api.commons.ObjectMapperSpecialized;
+import br.com.renanfretta.vehiclead.api.configs.CustomResponseEntityExceptionHandler;
 import br.com.renanfretta.vehiclead.api.dtos.vehicledealer.input.VehicleDealerInputDTO;
 import br.com.renanfretta.vehiclead.api.dtos.vehicledealer.output.VehicleDealerOutputDTO;
 import br.com.renanfretta.vehiclead.api.exceptions.entity.ResourceNotFoundException;
@@ -61,7 +62,8 @@ public class VehicleDealerResource {
     @PostMapping
     @Operation(summary = "Save new")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successful", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = VehicleDealerOutputDTO.class))})
+            @ApiResponse(responseCode = "200", description = "Successful", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = VehicleDealerOutputDTO.class))}),
+            @ApiResponse(responseCode = "400", description = "Bad request", content = {@Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = CustomResponseEntityExceptionHandler.ErrorOutputDTO.class)))})
     })
     public ResponseEntity<VehicleDealerOutputDTO> save(@RequestBody VehicleDealerInputDTO inputDTO) {
         log.info("VehicleDealerResource/save( " + objectMapper.writeValueAsStringNoException(inputDTO) + ") was called");
@@ -73,7 +75,8 @@ public class VehicleDealerResource {
     @Operation(summary = "Update all")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = VehicleDealerOutputDTO.class))}),
-            @ApiResponse(responseCode = "204", description = "No content", content = @Content)
+            @ApiResponse(responseCode = "204", description = "No content", content = @Content),
+            @ApiResponse(responseCode = "400", description = "Bad request", content = {@Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = CustomResponseEntityExceptionHandler.ErrorOutputDTO.class)))})
     })
     public ResponseEntity<VehicleDealerOutputDTO> updateAll(@PathVariable Long id, @RequestBody VehicleDealerInputDTO inputDTO) throws ResourceNotFoundException {
         log.info("VehicleDealerResource/updateAll(id: " + id + " obj: " + objectMapper.writeValueAsStringNoException(inputDTO) + ") was called");
@@ -85,7 +88,8 @@ public class VehicleDealerResource {
     @Operation(summary = "Partial update")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = VehicleDealerOutputDTO.class))}),
-            @ApiResponse(responseCode = "204", description = "No content", content = @Content)
+            @ApiResponse(responseCode = "204", description = "No content", content = @Content),
+            @ApiResponse(responseCode = "400", description = "Bad request", content = {@Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = CustomResponseEntityExceptionHandler.ErrorOutputDTO.class)))})
     })
     public ResponseEntity<VehicleDealerOutputDTO> partialUpdate(@PathVariable Long id, @RequestBody VehicleDealerInputDTO inputDTO) throws ResourceNotFoundException {
         log.info("VehicleDealerResource/partialUpdate(id: " + id + " obj: " + objectMapper.writeValueAsStringNoException(inputDTO) + ") was called");

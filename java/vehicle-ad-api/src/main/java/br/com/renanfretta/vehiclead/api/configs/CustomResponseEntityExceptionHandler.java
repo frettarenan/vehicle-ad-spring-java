@@ -64,7 +64,7 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
 
     @Getter
     @Builder
-    private static class ErrorOutputDTO {
+    public static class ErrorOutputDTO {
         private String userMessage;
         private String developerMessage;
     }
