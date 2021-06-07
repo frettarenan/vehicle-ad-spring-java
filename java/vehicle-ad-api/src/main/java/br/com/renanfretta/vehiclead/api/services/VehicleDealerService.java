@@ -40,14 +40,9 @@ public class VehicleDealerService {
     }
 
     public VehicleDealerOutputDTO findById(@NotNull @Range(min = 1) Long id) throws ResourceNotFoundException {
-        try {
-            VehicleDealer entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(messagesProperty, VehicleDealer.class, id));
-            log.info("VehicleDealerRepository/findById(" + id + ") was successful");
-            return orikaMapper.map(entity, VehicleDealerOutputDTO.class);
-        } catch (ResourceNotFoundException e) {
-            log.warn("VehicleDealerRepository/findById(" + id + ") notFound");
-            throw e;
-        }
+        VehicleDealer entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(messagesProperty, VehicleDealer.class, id));
+        log.info("VehicleDealerRepository/findById(" + id + ") was successful");
+        return orikaMapper.map(entity, VehicleDealerOutputDTO.class);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
