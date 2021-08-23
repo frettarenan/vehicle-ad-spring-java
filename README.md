@@ -1,4 +1,7 @@
 # Project: VehicleAd
+
+Test description: https://docs.google.com/document/d/1cKccRTy-EWxCfOK7vit62Nw-cwjf7sVzVP1Elt9KqgI
+
 Technologies:
 * Java 11
 * Spring Boot 2.5
